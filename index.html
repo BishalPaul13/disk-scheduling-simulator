@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Disk Scheduling Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="page-backdrop" aria-hidden="true"></div>
+    <main class="app-shell">
+      <section class="control-panel" aria-labelledby="app-title">
+        <div class="title-block">
+          <p class="eyebrow">Operating Systems Lab</p>
+          <h1 id="app-title">Disk Scheduling Simulator</h1>
+          <p class="intro-copy">Compare how the disk arm travels, where time is lost, and which scheduling strategy fits a request pattern.</p>
+        </div>
+
+        <form id="simulator-form" class="simulator-form">
+          <div class="field">
+            <label for="requests">Disk Requests</label>
+            <textarea id="requests" name="requests" rows="2" spellcheck="false">82 170 43 140 24 16 190</textarea>
+            <span class="field-hint">Separate cylinders with spaces or commas.</span>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="head">Initial Head</label>
+              <input id="head" name="head" type="number" min="0" value="50">
+            </div>
+            <div class="field">
+              <label for="disk-size">Disk Size</label>
+              <input id="disk-size" name="disk-size" type="number" min="2" value="200">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="algorithm">Scheduling Algorithm</label>
+            <select id="algorithm" name="algorithm">
+              <option value="FCFS">FCFS</option>
+              <option value="SSTF">SSTF</option>
+              <option value="SCAN">SCAN</option>
+              <option value="C-SCAN">C-SCAN</option>
+              <option value="Adaptive">Adaptive</option>
+            </select>
+          </div>
+
+          <div class="direction-row" id="direction-row">
+            <span>SCAN Direction</span>
+            <div class="segmented-control" role="group" aria-label="SCAN direction">
+              <input type="radio" id="direction-right" name="direction" value="right" checked>
+              <label for="direction-right">Right</label>
+              <input type="radio" id="direction-left" name="direction" value="left">
+              <label for="direction-left">Left</label>
+            </div>
+          </div>
+
+          <p id="error-message" class="message error" role="alert"></p>
+          <p id="recommendation" class="message recommendation"></p>
+
+          <div class="actions">
+            <button type="submit">Run Simulation</button>
+            <button type="button" id="sample-button" class="secondary-button">Use Sample</button>
+          </div>
+        </form>
+
+        <aside class="algorithm-card" aria-live="polite">
+          <span class="card-kicker">Strategy Notes</span>
+          <h2 id="algorithm-note-title">FCFS</h2>
+          <p id="algorithm-note">Processes requests in arrival order. It is simple and fair, but can create long arm sweeps when requests are scattered.</p>
+        </aside>
+      </section>
+
+      <section class="results-panel" aria-label="Simulation results">
+        <div class="metrics-grid">
+          <article class="metric">
+            <span class="metric-icon">Σ</span>
+            <span>Total Seek Time</span>
+            <strong id="total-seek">0</strong>
+          </article>
+          <article class="metric">
+            <span class="metric-icon">Ø</span>
+            <span>Average Seek Time</span>
+            <strong id="average-seek">0.00</strong>
+          </article>
+          <article class="metric">
+            <span class="metric-icon">↗</span>
+            <span>Throughput</span>
+            <strong id="throughput">0.00</strong>
+          </article>
+          <article class="metric">
+            <span class="metric-icon">↔</span>
+            <span>Arm Travel</span>
+            <strong id="arm-travel">0%</strong>
+          </article>
+        </div>
+
+        <div class="chart-header">
+          <div>
+            <p class="eyebrow">Head Movement</p>
+            <h2 id="algorithm-title">FCFS</h2>
+            <p id="profile-summary" class="chart-summary">Waiting for simulation data.</p>
+          </div>
+          <button type="button" id="replay-button" class="icon-button" aria-label="Replay animation" title="Replay animation">
+            ↻
+          </button>
+        </div>
+
+        <div class="chart-wrap">
+          <canvas id="seek-chart" width="960" height="520" aria-label="Disk head movement chart"></canvas>
+        </div>
+
+        <div class="insight-grid">
+          <div class="sequence-block">
+            <span>Seek Sequence</span>
+            <output id="sequence-output">50 -> 82 -> 170 -> 43 -> 140 -> 24 -> 16 -> 190</output>
+          </div>
+          <div class="timeline-block">
+            <span>Request Map</span>
+            <div id="request-map" class="request-map" aria-label="Cylinder request distribution"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

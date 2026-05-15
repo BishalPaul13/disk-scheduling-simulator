@@ -69,6 +69,13 @@ Disk requests: 82 170 43 140 24 16 190
 
 ## 🚀 How to Run
 
+### Web Version
+
+Open `index.html` in a browser to use the web simulator. It runs fully in the browser and does not require a server.
+
+### Python Desktop Version
+
 1. Clone the repo:
 ```bash
 git clone https://github.com/Bishal13102003/disk-scheduling-simulator.git
+```
